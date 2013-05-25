@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -66,9 +65,15 @@ public class HangmanSecond  extends JFrame {
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			for(int i = 0; i<button.length; i++){
+		for(int i = 0; i<button.length; i++){
 			if (event.getSource() == button[i])
-                line2.setText(text[i]);
+                	line2.setText(text[i]);
+			}
+			
+		for(int i = 0; i<button.length; i++){
+			if (event.getSource() == button[i])
+			button[i].setEnabled(false);
+
 			}
 
 			
