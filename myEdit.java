@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,18 +11,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class HangmanSecond extends JFrame {
+public class MyEdit extends JFrame {
 private JLabel line1;
 private JLabel line2;
 JTextField[][] cells;
 static String string = null;
 
-String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "w", "u", "v","x", "y", "z"};
-JButton[] letterButtons = new JButton[26];
+String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "w", "u", "v","x", "y", "z", "Reset"};
+JButton[] letterButtons = new JButton[27];
 
 
 
-HangmanSecond() {
+MyEdit() {
 setSize(800,400);
 line1 = new JLabel("0");
 line2 = new JLabel("0");
@@ -34,7 +35,7 @@ setLocationRelativeTo (null);
 
 JPanel mainPanel = new JPanel(new BorderLayout());
 JPanel gamePanel = new JPanel();
-JPanel alphabet = new JPanel(new GridLayout(7, 4));
+JPanel alphabet = new JPanel(new GridLayout(9, 3));
 line1.setText("Keyboard Guess: ");
 line2.setText(" ");
 
@@ -61,7 +62,7 @@ letterButtons[i] = new JButton(letters[i]);
 letterButtons[i].addActionListener(new KeyActionListener());
 letterButtons[i].setEnabled(true);
 letterButtons[i].setFocusPainted(false);
-alphabet.add (letterButtons[i]);  
+alphabet.add (letterButtons[i]);
 }
 
 
@@ -73,8 +74,8 @@ public void actionPerformed(ActionEvent event)
 {
 
 for(int i = 0; i<letterButtons.length; i++){
-if (event.getSource() == button[i])
-                 line2.setText(text[i]);
+if (event.getSource() == letterButtons[i])
+                 line2.setText(letters[i]);
 
 }
 
@@ -89,7 +90,7 @@ letterButtons[i].setEnabled(false);
 }
 
 public static void main(String[] args) {
-HangmanSecond example = new HangmanSecond();
+MyEdit example = new MyEdit();
 example.setVisible(true);
 
 }
