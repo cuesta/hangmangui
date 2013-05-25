@@ -1,5 +1,6 @@
 package hangman;
 
+import hangman.ui.BasicGameStateRenderer;
 import hangman.ui.GameStateRenderer;
 import hangman.ui.HangmanUI;
 import hangman.ui.WiltingFlowerRenderer;
@@ -25,7 +26,7 @@ public class HangmanGame implements WordSupplier
 		HangmanGame game = new HangmanGame();
 		int initialGuesses = 10;
 		HangmanLogic hangman = new HangmanLogic(game.nextWord(), initialGuesses);
-		GameStateRenderer gsr = new WiltingFlowerRenderer();
+		GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
 		HangmanUI ui = new HangmanUI(hangman, gsr);
 		ui.setVisible(true);
 		

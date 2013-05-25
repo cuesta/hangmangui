@@ -88,16 +88,24 @@ public class HangmanLogic
 	}
 	
 	/**
-	 * Evaluates "letter guessed", and fires "LetterGuessedEvent" on registered listeners.  Event evaluates as "success"
-	 * if the specified character exists in the keyPhrase field.  Will also fire the "game over" event, if game is over
-	 * as result of the guess.
-	 * @param guess  a character being checked for in the keyPhrase field
-	 * @throws InvalidInputException  if a non-valid character is passed as input to this method
-	 * @throws AlreadyGuessedException  if a valid character which has already been guessed is passed as input to this method
+	 * Evaluates "letter guessed", and fires "LetterGuessedEvent" on registered
+	 * listeners. Event evaluates as "success" if the specified character exists
+	 * in the keyPhrase field. Will also fire the "game over" event, if game is
+	 * over as result of the guess.
+	 * 
+	 * @param guess
+	 *            a character being checked for in the keyPhrase field
+	 * @throws InvalidInputException
+	 *             if a non-valid character is passed as input to this method
+	 * @throws AlreadyGuessedException
+	 *             if a valid character which has already been guessed is passed
+	 *             as input to this method
 	 */
 	public void guessCharacter(char guess) throws InvalidInputException,
-			AlreadyGuessedException {
-		if (!isValidCharacter(guess)) {
+			AlreadyGuessedException
+	{
+		if (!isValidCharacter(guess))
+		{
 			throw new InvalidInputException("" + guess);
 		}
 
@@ -106,19 +114,22 @@ public class HangmanLogic
 		// force into one case
 		guess = Character.toLowerCase(guess);
 
-		if (guessedCharacters.contains(guess)) {
+		if (guessedCharacters.contains(guess))
+		{
 			throw new AlreadyGuessedException("" + guess);
 		}
 
 		guessedCharacters.add(guess);
 		if (keyPhrase.contains("" + guess))
 			isCorrectGuess = true;
-		else {
+		else
+		{
 			numberOfGuessesLeft--;
 			isCorrectGuess = false;
 		}
 		notifyLetterGuessed(guess, isCorrectGuess);
-		if (isGameOver()) {
+		if (isGameOver())
+		{
 			notifyGameOver(getKnownKeyPhrase().equals(keyPhrase.toLowerCase()));
 		}
 	}

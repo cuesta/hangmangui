@@ -28,9 +28,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		LetterGuessedListener
 {
 
-	private JLabel line1;
-	private JLabel line2;
-	
+
 	private JPanel wordDisplay;
 	private JLabel word;
 	private HangmanLogic logic;
@@ -45,27 +43,20 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	{
 		super();
 		this.logic = logic;
-		constructUI();
+		constructUI(stateRenderer);
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
 
 		// SOMEWHERE DOWN THE LINE
 		// xyzComponent.add(stateRenderer.getDisplay());
-
-		// SOMEWHERE DOWN THE LINE
-		// display current phrase from "logic"
-
-		// SOMEWHERE DOWN THE LINE
-		// letterButtonActionListener - send message to logic:
-		// logic.guessCharacter(guess)
+		
 	}
 
-	private void constructUI()
+	private void constructUI(GameStateRenderer gsr)
 	{
 		setSize(800, 500);
-		line1 = new JLabel("0");
-		line2 = new JLabel("0");
+	
 
 		// places a title on the frame
 		setTitle("Hangman");
@@ -76,8 +67,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		JPanel gamePanel = new JPanel();
 		JPanel alphabet = new JPanel(new GridLayout(7, 4));
-		line1.setText("Keyboard Guess: ");
-		line2.setText(" ");
+	
 
 		word = new JLabel();
 		word.setText(logic.getKnownKeyPhrase());
@@ -88,7 +78,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		wordDisplay.add(word);
 
 		// add sub-panels to main panel
-		mainPanel.add(gamePanel, BorderLayout.WEST);
+		mainPanel.add(gamePanel, BorderLayout.CENTER);
 		mainPanel.add(alphabet, BorderLayout.EAST);
 		mainPanel.add(wordDisplay, BorderLayout.SOUTH);
 
@@ -96,8 +86,8 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		add(mainPanel);
 
 		// create a panel for game output
-		gamePanel.add(line1);
-		gamePanel.add(line2);
+		gamePanel.add(gsr.getDisplay());
+		
 
 		for (int i = 0; i < button.length; i++)
 		{
@@ -151,7 +141,6 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				if (event.getSource() == button[i])
 				{
 					String letter = text[i];
-					line2.setText(letter);
 					button[i].setEnabled(false);
 					try {
 						logic.guessCharacter(letter.charAt(0));

@@ -1,5 +1,7 @@
 package hangman.event;
 
+import hangman.HangmanLogic;
+
 import java.util.EventObject;
 
 /**
@@ -49,6 +51,12 @@ public class LetterGuessedEvent extends EventObject {
 	 */
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+	
+	/** Provides access to the HangmanLogic instance that fired the event.*/
+	public HangmanLogic getLogic() 
+	{
+		return (HangmanLogic) this.getSource();
 	}
 
 }
