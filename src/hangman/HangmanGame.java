@@ -4,42 +4,44 @@ import hangman.ui.BasicGameStateRenderer;
 import hangman.ui.GameStateRenderer;
 import hangman.ui.HangmanUI;
 import hangman.ui.WiltingFlowerRenderer;
+import hangman.RandomWord;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
  * Driver for UI Hangman Game.
- * @author
  * 
  */
-public class HangmanGame implements WordSupplier
+public class HangmanGame 
 {  
-	/** CARLOS, CAN YOU DO THIS, PLEASE? 
-	 * Per requirements:  Launches the HangmanGame
-	 * Accepts three command line arguments
-	 * Parameter 1: Path to the letters File so the computer knows what letters are allowed to be guessed (See letters.txt in the "Files You will need: " section).
-	 * Parameter 2: Path to the words File for computer word selection (See words.txt in the "Files You will need: " section).
-	 * Parameter 3: A character (either 'r', 's', ‘c’, or h) representing which type of computer player to use (random, systematic, or clever respectively) or if the guesser will be a human.
+	/** COMMAND LINE ARGUEMENTS
+	 * Type this into program arguements box (w/o brackets) [words.txt letters.txt r s c h]
+	 * The three command line arguments
+	 * args[0]: Path to the words File for computer word selection
+	 * args[1]: Path to the letters File 
+	 * args[r]: Random AI
+	 * args[s]: Systematic AI
+	 * args[c]: Clever AI
+	 * args[h]: Human AI
 	 */
-	public static void main(String[] args) 
+	//uses the command line arguement to get a file name 
+	public static void main(String[] args) throws IOException 
 	{
-		HangmanGame game = new HangmanGame();
+		String nextWord = WordSupplier.secretWord(args[0]);
 		int initialGuesses = 10;
-		HangmanLogic hangman = new HangmanLogic(game.nextWord(), initialGuesses);
+		HangmanLogic hangman = new HangmanLogic(nextWord, initialGuesses);
 		GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
 		HangmanUI ui = new HangmanUI(hangman, gsr);
 		ui.setVisible(true);
 		
 	}
-
-	/* (non-Javadoc)
-	 * @see hangman.WordSupplier#nextWord()
-	 */
-	@Override
-	public String nextWord() {
-		// TODO IMPLEMENT TO SELECT RANDOM WORD FROM WORDLIST; IGNORING ANY WORDS THAT HAVE CHARACTERS OTHER THAN A-Z
-		return "artificial";
-	}
-	
 	
 }
+
