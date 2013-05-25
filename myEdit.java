@@ -17,7 +17,7 @@ private JLabel line2;
 JTextField[][] cells;
 static String string = null;
 
-String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "w", "u", "v","x", "y", "z"};
+String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "u", "v","w", x", "y", "z"};
 JButton[] letterButtons = new JButton[26];
 
 
@@ -35,7 +35,7 @@ setLocationRelativeTo (null);
 
 JPanel mainPanel = new JPanel(new BorderLayout());
 JPanel gamePanel = new JPanel();
-JPanel alphabet = new JPanel(new GridLayout(9, 3));
+JPanel alphabet = new JPanel(new GridLayout(5, 6));
 line1.setText("Keyboard Guess: ");
 line2.setText(" ");
 
