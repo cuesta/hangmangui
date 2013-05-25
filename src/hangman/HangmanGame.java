@@ -26,10 +26,10 @@ public class HangmanGame
 	 * The three command line arguments
 	 * args[0]: Path to the words File for computer word selection
 	 * args[1]: Path to the letters File 
-	 * args[r]: Random AI
-	 * args[s]: Systematic AI
-	 * args[c]: Clever AI
-	 * args[h]: Human AI
+	 * args[2]: Random AI
+	 * args[3]: Systematic AI
+	 * args[4]: Clever AI
+	 * args[5]: Human AI
 	 */
 	//uses the command line arguement to get a file name 
 	public static void main(String[] args) throws IOException 
