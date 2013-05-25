@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -27,7 +26,11 @@ public class HangmanSecond  extends JFrame {
 		line1 = new JLabel("0");
 		line2 = new JLabel("0");
 
-		
+		//places a title on the frame
+		setTitle ("Hangman");
+
+		//sets the location of the frame to centered on the screen
+		setLocationRelativeTo (null);
 		
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		JPanel gamePanel = new JPanel();
@@ -55,7 +58,7 @@ public class HangmanSecond  extends JFrame {
 		for(int i = 0; i<button.length; i++)
 			{
 				button[i] = new JButton(text[i]);
-		        button[i].addActionListener(new KeyActionListener());
+		        	button[i].addActionListener(new KeyActionListener());
 				button[i].setEnabled(true);
 				button[i].setFocusPainted(false);
 				alphabet.add (button[i]);	
@@ -71,7 +74,7 @@ public class HangmanSecond  extends JFrame {
 			
 			for(int i = 0; i<button.length; i++){
 			if (event.getSource() == button[i])
-                line2.setText(text[i]);
+                	line2.setText(text[i]);
 
 			}
 			
