@@ -17,8 +17,8 @@ private JLabel line2;
 JTextField[][] cells;
 static String string = null;
 
-String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "w", "u", "v","x", "y", "z", "Reset"};
-JButton[] letterButtons = new JButton[27];
+String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o","p", "q", "r", "s", "t", "w", "u", "v","x", "y", "z"};
+JButton[] letterButtons = new JButton[26];
 
 
 
