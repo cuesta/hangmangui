@@ -1,3 +1,4 @@
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +12,7 @@ import javax.swing.JTextField;
 
 
 public class HangmanSecond  extends JFrame {
-  private JLabel line1;
+	private JLabel line1;
 	private JLabel line2;
 	JTextField[][] cells;
 	static String string = null;
@@ -55,6 +56,8 @@ public class HangmanSecond  extends JFrame {
 			{
 				button[i] = new JButton(text[i]);
 		        button[i].addActionListener(new KeyActionListener());
+				button[i].setEnabled(true);
+				button[i].setFocusPainted(false);
 				alphabet.add (button[i]);	
 			}
 
@@ -65,14 +68,16 @@ public class HangmanSecond  extends JFrame {
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-		for(int i = 0; i<button.length; i++){
+			
+			for(int i = 0; i<button.length; i++){
 			if (event.getSource() == button[i])
-                	line2.setText(text[i]);
+                line2.setText(text[i]);
+
 			}
 			
-		for(int i = 0; i<button.length; i++){
+			for(int i = 0; i<button.length; i++){
 			if (event.getSource() == button[i])
-			button[i].setEnabled(false);
+				button[i].setEnabled(false);
 
 			}
 
