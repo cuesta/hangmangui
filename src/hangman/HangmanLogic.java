@@ -102,13 +102,16 @@ public class HangmanLogic
 	 *             as input to this method
 	 */
 	public void guessCharacter(char guess) throws InvalidInputException,
-			AlreadyGuessedException
+			AlreadyGuessedException, GameAlreadyOverException
 	{
 		if (!isValidCharacter(guess))
 		{
 			throw new InvalidInputException("" + guess);
 		}
-
+		if (isGameOver())
+		{
+			throw new GameAlreadyOverException();
+		}
 		boolean isCorrectGuess = false;
 
 		// force into one case
@@ -173,9 +176,7 @@ public class HangmanLogic
 	 */
 	public boolean isGameOver()
 	{
-		boolean guessed = (getKnownKeyPhrase().equals(keyPhrase.toLowerCase()));
-		
-		return( numberOfGuessesLeft == 0 || guessed);		
+		return ( numberOfGuessesLeft == 0 || getKnownKeyPhrase().equals(keyPhrase.toLowerCase()));		
 	}
 	
 	/**

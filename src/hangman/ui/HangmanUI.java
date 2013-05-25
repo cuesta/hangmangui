@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import hangman.HangmanLogic;
+import hangman.LetterSelector;
+import hangman.ai.SimplisticPlayer;
 import hangman.event.GameOverEvent;
 import hangman.event.GameOverListener;
 import hangman.event.LetterGuessedEvent;
@@ -25,31 +27,35 @@ import javax.swing.JTextField;
  */
 @SuppressWarnings("serial")
 public class HangmanUI extends JFrame implements GameOverListener,
-		LetterGuessedListener
+		LetterGuessedListener, LetterSelector
 {
 
 
 	private JPanel wordDisplay;
 	private JLabel word;
 	private HangmanLogic logic;
+	// just for testing/demo purposes at this point - we'll need to add the AI to the constructor
+	private SimplisticPlayer dumbAi;
+	private JButton aiButton;
 
 	String[] text =
 	{ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z",
-			"Restart", "Start" };
-	JButton[] button = new JButton[28];
+			"Restart" };
+	JButton[] button = new JButton[text.length];
 
 	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer)
 	{
 		super();
+		
 		this.logic = logic;
 		constructUI(stateRenderer);
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
-
-		// SOMEWHERE DOWN THE LINE
-		// xyzComponent.add(stateRenderer.getDisplay());
+		dumbAi = new SimplisticPlayer(this);
+		logic.addLetterGuessedListener(dumbAi);
+		
 		
 	}
 
@@ -97,6 +103,19 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			button[i].setFocusPainted(false);
 			alphabet.add(button[i]);
 		}
+		
+		
+		aiButton = new JButton("AI Test");
+		wordDisplay.add(aiButton);
+		aiButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				dumbAi.start();
+				aiButton.setEnabled(false);
+				// re-enable once game is over
+			}});
 
 	}
 
@@ -152,9 +171,22 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				}
 
 			}
+		}
+	}
 
+	/* (non-Javadoc)
+	 * @see hangman.LetterSelector#selectLetter(char)
+	 */
+	@Override
+	public void selectLetter(char c)
+	{
+		for (int i = 0; i < button.length; i++)
+		{
+			if(button[i].getText().charAt(0) == c)
+			{
+				button[i].doClick();
+			}
 			
-
 		}
 	}
 }
