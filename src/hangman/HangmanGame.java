@@ -29,7 +29,7 @@ public class HangmanGame
 	 * args[2]: "r" - Random AI
 	 * args[3]: "s" - Systematic AI
 	 * args[4]: "c" - Clever AI
-	 * args[5]: "h" - Human AI
+	 * args[5]: "h" - Human play
 	 */
 	//uses the command line arguement to get a file name 
 	public static void main(String[] args) throws IOException 
