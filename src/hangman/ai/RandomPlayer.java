@@ -2,7 +2,7 @@ import java.util.*;
 
 public class RandomPlayer 
 {
-  private String word;
+	private String word;
 	private char[] guessed;
 	private char[] guessable;
 	int count;
@@ -34,13 +34,14 @@ public class RandomPlayer
 					alreadyGuessed = true;
 					break;
 				}
-			}
 			
-			if (!alreadyGuessed) 
-			{
-				guessed[count] = guessable[r];
-				count++;
-				return guessable[r];
+			
+				if (!alreadyGuessed) 
+				{
+					guessed[count] = guessable[i];
+					count++;
+					return guessable[i];
+				}
 			}
 		}
 
