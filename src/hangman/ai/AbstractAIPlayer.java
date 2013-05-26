@@ -20,6 +20,7 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 {
 
 	protected LetterSelector selector;
+	protected boolean listeningEnabled;
 	
 	/** Creates a new instance with the LetterSelector indicated.
 	 * @param select callback to the UI to select a letter
@@ -44,9 +45,19 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 		this.selector = selector;
 	}
 	
+	protected void setListeningEnabled(boolean tf) 
+	{
+		listeningEnabled = tf;
+	}
+	
+	protected boolean isListeningEnabled()
+	{
+		return listeningEnabled;
+	}
 	/** Causes the AI player to select the first letter.*/
 	public void start() 
 	{
+		setListeningEnabled(true);
 		selector.selectLetter(nextLetter());
 	}
 
@@ -56,25 +67,36 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	 
 	/** Reacts to a LetterGuessedEvent.*/
 	public void onLetterGuessed(final LetterGuessedEvent eve) {
+		// if this instance is inactive, don't handle events
+		if(!listeningEnabled)
+		{
+			return;
+		}
 		// as long as the game isn't over, a "letter guessed" event will trigger this instance to select the next letter
 		// and "select" it in the target selector (in our concrete instance, it will click the letter button in the UI
-		if(!eve.getLogic().isGameOver()) 
+		if (!eve.getLogic().isGameOver())
 		{
-			// We're in an event loop here.  To allow the other listeners to catch up,
-			// the next letter selection is happening on a diffrent thread after a time delay.
-			ActionListener taskPerformer = new ActionListener() {
+			// We're in an event loop here. To allow the other listeners to
+			// catch up,
+			// the next letter selection is happening on a different thread
+			// after a time delay.
+			ActionListener taskPerformer = new ActionListener()
+			{
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					// double-check game state
-					if (!eve.getLogic().isGameOver())
-					{
-						selector.selectLetter(nextLetter());
-					}
+					selector.selectLetter(nextLetter());
 				}
-			  };
-			  new Timer(2000, taskPerformer).start();
-		} 
+			};
+			Timer t = new Timer(2000, taskPerformer);
+			t.setRepeats(false);
+			t.start();
+		}
+		else
+		{
+			// switch off listening after a round has been completed
+			setListeningEnabled(false);
+		}
 	
 	}
 }

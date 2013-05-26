@@ -1,6 +1,7 @@
 package hangman.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -184,7 +185,23 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		{
 			if(button[i].getText().charAt(0) == c)
 			{
+				// adding a bit of 'pop' to the AI version:
+				Color savedF = button[i].getForeground();
+				button[i].setForeground(Color.BLUE);
+				try 
+				{ // slowing down the UI a bit
+					Thread.sleep(200L);
+				} catch (Exception e) {
+					// ignore
+				}
 				button[i].doClick();
+				try 
+				{ // slowing down the UI a bit
+					Thread.sleep(200L);
+				} catch (Exception e) {
+					// ignore
+				}
+				button[i].setForeground(savedF);
 			}
 			
 		}

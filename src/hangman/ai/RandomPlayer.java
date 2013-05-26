@@ -1,3 +1,5 @@
+package hangman.ai;
+
 import java.util.*;
 
 public class RandomPlayer 
