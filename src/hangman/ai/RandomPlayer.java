@@ -1,44 +1,22 @@
 package hangman.ai;
 
-import hangman.LetterSelector;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
+/** Represents an AI players that simply selects random letters that are "approved" 
+ * and haven't been guessed yet.
+ * May 26, 2013
+ */
 public class RandomPlayer extends AbstractAIPlayer
 {
-
-
-	private List<Character> guessable;
-
-	
-	
 	/**
 	 * @param select
 	 */
-	public RandomPlayer(LetterSelector select, File letters) throws IOException
+	public RandomPlayer(List<Character> guessables) 
 	{
-		super(select);
-		guessable = new ArrayList<Character>();
-		readLetters(letters);
+		super("Random Player");
+		guessableOrig = guessables;
+		initialize();
 	}
-
-	
-	
-	private void readLetters(File letters) throws IOException 
-	{
-		Scanner sc = new Scanner(letters);
-	
-		while (sc.hasNextLine()) 
-		{
-			String s = sc.nextLine();
-			guessable.add(s.charAt(0));
-			
-		}	
-	}
-
-	
 	
 	@Override
 	public char nextLetter()
@@ -49,8 +27,11 @@ public class RandomPlayer extends AbstractAIPlayer
 		}
 		Random rand = new Random();
 		int characterIndex = rand.nextInt(guessable.size());
-		char candidate = guessable.get(characterIndex);
+		// retrieve the random character, and remove it from the list so we don't use it again
+		char candidate = guessable.remove(characterIndex);
 		return candidate;
-		
 	}
+
+	
 }
+

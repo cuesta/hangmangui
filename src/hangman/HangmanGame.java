@@ -1,19 +1,15 @@
 package hangman;
 
+import hangman.ai.AbstractAIPlayer;
+import hangman.ai.CleverPlayer;
+import hangman.ai.RandomPlayer;
+import hangman.ai.SystematicPlayer;
 import hangman.ui.BasicGameStateRenderer;
 import hangman.ui.GameStateRenderer;
 import hangman.ui.HangmanUI;
-import hangman.ui.WiltingFlowerRenderer;
-import hangman.RandomWord;
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.List;
 
 /**
  * Driver for UI Hangman Game.
@@ -22,14 +18,11 @@ import java.util.Scanner;
 public class HangmanGame 
 {  
 	/** COMMAND LINE ARGUEMENTS
-	 * Type this into program arguements box (w/o brackets) [words.txt letters.txt r s c h]
+	 * Type this into program arguements box (w/o brackets) [words.txt letters.txt r|s|c|h]
 	 * The three command line arguments
 	 * args[0]: "words.txt" - Path to the words File for computer word selection
 	 * args[1]: "letters.txt" - Path to the letters File 
-	 * args[2]: "r" - Random AI
-	 * args[3]: "s" - Systematic AI
-	 * args[4]: "c" - Clever AI
-	 * args[5]: "h" - Human play
+	 * args[2]: either "r" - Random AI, "s" - Systematic AI, "c" - Clever AI, "h" - Human play
 	 */
 	//uses the command line arguement to get a file name 
 	public static void main(String[] args) throws IOException 
@@ -39,14 +32,56 @@ public class HangmanGame
 			System.out.println("You must provide 3 arguments: path to word file, path to letter file, and code for AI player.");
 			System.out.println("r = random, s = systematic, c = clever, h = human");
 		}
-		WordSupplier wordSupplier = new WordSupplier(args[0]);
+		try 
+		{
+			File words = validateFile(args[0]);
+			
+			File letters = validateFile(args[1]);
+			
+			WordSupplier wordSupplier = new WordSupplier(words);
+			
+			int initialGuesses = 10;
+			HangmanLogic hangman = new HangmanLogic(wordSupplier.secretWord(), initialGuesses);
+			GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
+			AbstractAIPlayer player = null;
+			List<Character> guessables = LetterParser.parseCharacterFile(letters);
+			
+			char modeCode = args[2].charAt(0);
+			// determine which AI player to load:
+			switch(modeCode)
+			{
+			case 'r':
+				player = new RandomPlayer(guessables);
+				break;
+			case 's':
+				player = new SystematicPlayer(guessables);
+				break;
+			case 'c':
+				player = new CleverPlayer();
+				break;
+			case 'h':
+				break;
+				default :
+					System.out.println("You've provided an invalid mode: "+args[2]);
+			}
+			HangmanUI ui = new HangmanUI(hangman, gsr, player);
+			ui.setVisible(true);
+		} catch (Exception e) 
+		{
+			System.out.println("An exception occurred: ");
+			e.printStackTrace();
+		}
 		
-		int initialGuesses = 10;
-		HangmanLogic hangman = new HangmanLogic(wordSupplier.secretWord(), initialGuesses);
-		GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
-		HangmanUI ui = new HangmanUI(hangman, gsr);
-		ui.setVisible(true);
-		
+	}
+	
+	private static File validateFile(String file)
+	{
+		File f = new File(file);
+		if(!f.exists() )
+		{
+			throw new IllegalArgumentException("Path to file is incorrect, or file cannot be read: "+file);
+		}
+		return f;
 	}
 	
 }

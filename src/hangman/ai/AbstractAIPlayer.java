@@ -2,6 +2,9 @@ package hangman.ai;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.Timer;
 
@@ -22,7 +25,34 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	protected LetterSelector selector;
 	protected boolean listeningEnabled;
 	protected int wordLength;
+	protected List<Character> guessableOrig;
+	protected List<Character> guessable;
+	protected String name;
 	
+	/** Creates a new instance with the LetterSelector indicated.
+	 * Note that the "selector" must be set before the instance is usable.
+	 * */
+	public AbstractAIPlayer(String name)
+	{
+		setName(name);
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName()
+	{
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	/** Creates a new instance with the LetterSelector indicated.
 	 * @param select callback to the UI to select a letter
 	 * */
@@ -68,6 +98,8 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	/** Returns the next letter for guessing.*/
 	public abstract char nextLetter();
 	
+	
+	
 	 
 	/** Reacts to a LetterGuessedEvent.*/
 	public void onLetterGuessed(final LetterGuessedEvent eve) {
@@ -101,7 +133,6 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 			// switch off listening after a round has been completed
 			setListeningEnabled(false);
 		}
-	
 	}
 
 	/**
@@ -118,5 +149,26 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	public void setWordLength(int wordLength)
 	{
 		this.wordLength = wordLength;
+	}
+
+	protected void initialize()
+	{
+		if(guessableOrig!=null)
+		{
+			guessable = new ArrayList<Character>(guessableOrig.size());
+			Collections.copy(guessableOrig, guessable);
+		}
+	}
+
+	/** Reinitializes this instance for another round.*/ 
+	public void reset()
+	{
+		initialize();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getName();
 	}
 }

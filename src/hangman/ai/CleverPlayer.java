@@ -1,7 +1,6 @@
 package hangman.ai;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +9,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import hangman.HangmanLogic;
-import hangman.LetterSelector;
 import hangman.event.LetterGuessedEvent;
 
 /**
@@ -22,32 +21,56 @@ import hangman.event.LetterGuessedEvent;
  * 3.  Based on the frequency of the five letters in the guessable phrase, further narrow down the words from the word file, which is
  *     marked up with the same frequency pattern. 
  * 4.  From there on, choose as-of-yet not guessed letters from the candidate words to further narrow down the word list.
+ * 
+ * Note that this strategic player does not read in the letter file - it relies on a regular expression instead.  In an ideal world,
+ * we'd determine a regular expression based on the letters in the input file, or else, allow the file to contain the actual regular expression
+ * instead of individual letters.
+ * 
  * @author Vera Coberley
  * May 25, 2013
  */
 
 public class CleverPlayer extends AbstractAIPlayer
 {
-
+	private static final String FILE_SUFFIX = "_words_sorted.txt";
 	protected char[] frequentLetters = {'e','t','a','o','i'};
 	protected char[] sortedFrequentLetters;
 	protected int frequentLetterIndex;
 	protected List<String> wordCandidates;
 	protected List<Character> guessedCharacters;
-	private static final String FILE_SUFFIX = "_words_sorted.txt";
+	
 	private StringBuilder etaoiCount;
 	private String currentRegex;
+	private File resourcesDir;
 	
 	/**
 	 * @param select
 	 */
-	public CleverPlayer(LetterSelector select)
+	public CleverPlayer()
 	{
-		super(select);
-		guessedCharacters = new ArrayList<Character>();
+		super("Clever Player");
+		
 		sortedFrequentLetters = Arrays.copyOf(frequentLetters, frequentLetters.length);
 		Arrays.sort(sortedFrequentLetters);
+		initialize();
+	}
+	
+	@Override
+	protected void initialize()
+	{
+		super.initialize();
+		guessedCharacters = new ArrayList<Character>();
 		etaoiCount = new StringBuilder(5);
+		wordCandidates = null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see hangman.ai.AbstractAIPlayer#reset()
+	 */
+	@Override
+	public void reset()
+	{
+		initialize();
 	}
 
 	/* (non-Javadoc)
@@ -89,6 +112,10 @@ public class CleverPlayer extends AbstractAIPlayer
 		super.onLetterGuessed(eve);
 	}
 	
+	/** If the letter we guessed was not contained in the target word, remove any candidate words that contain that 
+	 * letter as they obvioulsy are not the target word.
+	 * @param unmatched
+	 */
 	private void filterCandidateListAgainstUnmatchedChar(char unmatched)
 	{
 		if (wordCandidates == null)
@@ -107,6 +134,9 @@ public class CleverPlayer extends AbstractAIPlayer
 		}
 	}
 	
+	/** If the letter we guessed was contained in the target word, use the knowledge of the position of this letter in the target word via the
+	 * 'curren key phrase' (target key phrase with dash substitutes for as-of-yet unguessed characters.)
+	 */
 	private void filterCandidateListAgainstKnownKeyPhrase()
 	{
 		if(wordCandidates!=null)
@@ -123,6 +153,7 @@ public class CleverPlayer extends AbstractAIPlayer
 		}
 	}
 	
+	/** Determine how many times a given character is found in a given word.*/
 	private int getLetterCount(char target, String word)
 	{
 		int count =0;
@@ -136,19 +167,16 @@ public class CleverPlayer extends AbstractAIPlayer
 		return count;
 	}
 	
+	/** Iterate over candidate words, looking for letters we haven't guessed yet.*/
 	private char nextStrategicLetter()
 	{
-		char next = ' ';
-		while (next == ' ')
+		for (String word : wordCandidates)
 		{
-			for (String word : wordCandidates)
+			for (char c : word.toCharArray())
 			{
-				for (char c : word.toCharArray())
+				if(!guessedCharacters.contains(c))
 				{
-					if(!guessedCharacters.contains(c))
-					{
-						return c;
-					}
+					return c;
 				}
 			}
 		}
@@ -157,20 +185,23 @@ public class CleverPlayer extends AbstractAIPlayer
 	
 	/** Loading the marked-up, word-length file, and retrieving candidate words. */
 	private void loadWordCandidates(String regexPattern) 
-	{
-		File dir = null;
-		while (dir == null)
-		{
+	{// Inclusion of Swing components in this method is not ideal, due to coupling to a graphical implementation.  
+		//If this whole app was packaged as a jar, we could
+		// simply load the resources from there.  For now, it will have to do!
+	
+		while (resourcesDir == null)
+		{ // ideally, this would be an obvious label on the file chooser, but I'm running out of time ...
+			JOptionPane.showMessageDialog(null, "You will be asked to locate the 'resources' directory in this project's root folder.");
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setDialogTitle("Please locate the 'resources' directory in the project folder:");
+			fileChooser.setDialogTitle("Select 'resources' directory");
 			fileChooser.showOpenDialog(null);
-			dir = fileChooser.getSelectedFile();
+			resourcesDir = fileChooser.getSelectedFile();
 		}
 		String frequencyPattern = etaoiCount.toString();
 		wordCandidates = new ArrayList<String>();
 		
-		File wordFile = new File(dir.getAbsolutePath()+File.separator + this.getWordLength()+FILE_SUFFIX);
+		File wordFile = new File(resourcesDir.getAbsolutePath()+File.separator + this.getWordLength()+FILE_SUFFIX);
 		try 
 		{
 			Scanner scan = new Scanner(wordFile);
@@ -203,5 +234,7 @@ public class CleverPlayer extends AbstractAIPlayer
 			throw new RuntimeException(ioe);
 		}
 	}
+
+	
 
 }

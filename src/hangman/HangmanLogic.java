@@ -35,13 +35,25 @@ public class HangmanLogic
 	 */
 	public HangmanLogic(String keyPhrase, int numberOfGuesses)
 	{
+		initialize(keyPhrase, numberOfGuesses);
+	}	
+	
+	private void initialize(String keyPhrase, int numberOfGuesses)
+	{
 		this.keyPhrase = keyPhrase;		
 		this.numberOfGuesses = numberOfGuesses;
 		this.numberOfGuessesLeft = numberOfGuesses;
 		guessedCharacters = new ArrayList<Character>();
-	}	
+	}
 	
-	
+	/** Resets this  instance for a new round.
+	 * @param newPhrase  the phrase to be used for the key phrase of the hangman game
+	 * @param numGuesses  the number of guesses allowed in the hangman game
+	 * */
+	public void reset(String keyPhrase, int numberOfGuesses)
+	{
+		initialize(keyPhrase, numberOfGuesses);
+	}
 
 	/**
 	 * Accessor method for the keyPhrase field
@@ -169,6 +181,7 @@ public class HangmanLogic
 				listen.onGameOver(eve);
 			} catch (Exception e)
 			{
+				// ideally, this would be a call back to the UI to display message
 				e.printStackTrace();
 			}
 		}

@@ -6,15 +6,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import hangman.HangmanLogic;
 import hangman.LetterSelector;
 import hangman.ai.AbstractAIPlayer;
-import hangman.ai.CleverPlayer;
-import hangman.ai.RandomPlayer;
-import hangman.ai.SimplisticPlayer;
 import hangman.event.GameOverEvent;
 import hangman.event.GameOverEvent.Result;
 import hangman.event.GameOverListener;
@@ -26,10 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
- * REPLACE/UPDATE WITH YOUR JFRAME LOGIC BUT KEEP Frame for HangmanGame
+ * Frame and controller for HangmanGame
  * 
  * @author May 24, 2013
  */
@@ -38,12 +33,10 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		LetterGuessedListener, LetterSelector
 {
 
-
 	private JPanel wordDisplay;
 	private JLabel word;
 	private HangmanLogic logic;
-	// just for testing/demo purposes at this point - we'll need to add the AI to the constructor
-	private AbstractAIPlayer dumbAi;
+	private AbstractAIPlayer aiPlayer;
 	private JButton aiButton;
 	private JButton restartButton;
 
@@ -52,25 +45,27 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z"};
 	JButton[] button = new JButton[text.length];
 
-	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer) throws IOException
+	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer, AbstractAIPlayer aiPlayer) throws IOException
 	{
 		super();
-		
+		this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		this.logic = logic;
 		constructUI(stateRenderer);
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
-		dumbAi = new CleverPlayer(this);//new RandomPlayer(this, new File("letters.txt"));
-		logic.addLetterGuessedListener(dumbAi);
-		
-		
+		if(aiPlayer!=null)
+		{
+			this.aiPlayer = aiPlayer;
+			// provide a callback to the AI player to this instance to select the next letter:
+			aiPlayer.setSelector(this);
+			logic.addLetterGuessedListener(aiPlayer);
+		}
 	}
 
 	private void constructUI(GameStateRenderer gsr)
 	{
 		setSize(800, 500);
-	
 
 		// places a title on the frame
 		setTitle("Hangman");
@@ -113,16 +108,15 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		}
 		
 		
-		aiButton = new JButton("AI Test");
+		aiButton = new JButton("Run AI");
 		wordDisplay.add(aiButton);
 		aiButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				dumbAi.start(logic.getKnownKeyPhrase().length());
 				aiButton.setEnabled(false);
-				// re-enable once game is over
+				aiPlayer.start(logic.getKnownKeyPhrase().length());
 			}
 		});
 		
@@ -161,7 +155,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, "Congratulations, you guessed right!");
+			JOptionPane.showMessageDialog(this, "Congratulations, you guessed correctly!");
 		}
 
 	}

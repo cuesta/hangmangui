@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 public class BasicGameStateRenderer implements GameStateRenderer
 {
-	private static int MAX_GUESSES = 20;
+	private static int MAX_GUESSES = 26;
 	private JPanel panel;
 	private JLabel instructions;
 	private JLabel nbrPanel;

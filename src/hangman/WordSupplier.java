@@ -16,24 +16,26 @@ public class WordSupplier
 	private int wordCount;
 	private File wordFile;
 	
-	public WordSupplier(String filename) throws IOException
+	public WordSupplier(File filename) throws IOException
 	{
 		// determine how many lines there are in the file, so we can randomly pick one
-		wordFile = new File(filename);
+		wordFile = filename;
+		long now = System.currentTimeMillis();
     	BufferedReader br = new BufferedReader(new FileReader(wordFile));
 	    while (br.readLine()!=null)  
 	    {
 	    	wordCount++;
 	    }
 	    br.close();
-	    System.out.println("Number of words: "+wordCount);
+	    long later = System.currentTimeMillis();
+	    System.out.println("Number of words: "+wordCount+"; time ms: "+(later-now));
 	}
 	
 	/** Returns the next random word.*/
 	public String secretWord() throws IOException
 	{
 		String randomWord = null;
-		// outer loop provided in case last few lines of the word input list provide invalid content
+		// outer loop provided in case the last few lines of the word input list provide invalid content, and we don't get a "hit"
 		while(randomWord == null)
 		{
 			BufferedReader br = new BufferedReader(new FileReader(wordFile));
