@@ -48,4 +48,11 @@ public class RandomPlayer extends AbstractAIPlayer
 		}
 
 	}
+	
+	@Override
+	public char nextLetter()
+	{
+		// returns the next letter in the alphabet and advances the index
+		return chars[charIndex++];
+	}
 }
