@@ -133,7 +133,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		// over
 		// If player lost game, reveal the word
 		
-		JOptionPane.showMessageDialog(this, "Sorry, the word was wordVariable. Game Over!");
+		JOptionPane.showMessageDialog(this, "Sorry, the word was " +keyPhrase+ ". Game Over!");
 		
 
 	}
