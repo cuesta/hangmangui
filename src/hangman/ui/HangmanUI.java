@@ -6,11 +6,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import hangman.HangmanLogic;
 import hangman.LetterSelector;
 import hangman.ai.AbstractAIPlayer;
 import hangman.ai.CleverPlayer;
+import hangman.ai.RandomPlayer;
 import hangman.ai.SimplisticPlayer;
 import hangman.event.GameOverEvent;
 import hangman.event.GameOverEvent.Result;
@@ -42,13 +45,14 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	// just for testing/demo purposes at this point - we'll need to add the AI to the constructor
 	private AbstractAIPlayer dumbAi;
 	private JButton aiButton;
+	private JButton restartButton;
 
 	String[] text =
 	{ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z"};
 	JButton[] button = new JButton[text.length];
 
-	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer)
+	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer) throws IOException
 	{
 		super();
 		
@@ -57,7 +61,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
-		dumbAi = new CleverPlayer(this);
+		dumbAi = new CleverPlayer(this);//new RandomPlayer(this, new File("letters.txt"));
 		logic.addLetterGuessedListener(dumbAi);
 		
 		
@@ -122,7 +126,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			}
 		});
 		
-		/*
+		
 		restartButton = new JButton("Start Over");
 		wordDisplay.add(restartButton);
 		restartButton.addActionListener(new ActionListener(){
@@ -133,7 +137,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				
 				
 			}
-		});*/
+		});
 	}
 
 	/*

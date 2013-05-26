@@ -36,7 +36,7 @@ public class HangmanGame
 	{
 		if(args.length!=3)
 		{
-			System.out.println("You must provide 3 arguments: path to word file, path to letter file (not used), and code for AI player.");
+			System.out.println("You must provide 3 arguments: path to word file, path to letter file, and code for AI player.");
 			System.out.println("r = random, s = systematic, c = clever, h = human");
 		}
 		WordSupplier wordSupplier = new WordSupplier(args[0]);

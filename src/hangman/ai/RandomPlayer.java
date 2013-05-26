@@ -1,58 +1,56 @@
 package hangman.ai;
 
+import hangman.LetterSelector;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class RandomPlayer extends AbstractAIPlayer
+{
 
-	private String word;
-	private char[] guessed;
-	private char[] guessable;
-	int count;
+
+	private List<Character> guessable;
+
 	
-	public void readLetters() 
+	
+	/**
+	 * @param select
+	 */
+	public RandomPlayer(LetterSelector select, File letters) throws IOException
 	{
-		Scanner sc = new Scanner("letters.txt");
-		int count = 0;
+		super(select);
+		guessable = new ArrayList<Character>();
+		readLetters(letters);
+	}
+
+	
+	
+	private void readLetters(File letters) throws IOException 
+	{
+		Scanner sc = new Scanner(letters);
+	
 		while (sc.hasNextLine()) 
 		{
 			String s = sc.nextLine();
-			guessable[count] = s.charAt(0);
-			count++;
+			guessable.add(s.charAt(0));
+			
 		}	
 	}
 
-	public char randomPlayer()
-	{
-		while (true)
-		{
-			Random rand = new Random();
-			int r = rand.nextInt(word.length());
-			
-			boolean alreadyGuessed = false;
-			for (int i = 0; i < guessed.length; i++) 
-			{
-				if (guessable[i] == guessed[i]) 
-				{
-					alreadyGuessed = true;
-					break;
-				}
-			
-			
-				if (!alreadyGuessed) 
-				{
-					guessed[count] = guessable[i];
-					count++;
-					return guessable[i];
-				}
-			}
-		}
-
-	}
+	
 	
 	@Override
 	public char nextLetter()
 	{
-		// returns the next letter in the alphabet and advances the index
-		return chars[charIndex++];
+		if(guessable.isEmpty())
+		{
+			throw new IllegalStateException("We've consumed all guessable letters!");
+		}
+		Random rand = new Random();
+		int characterIndex = rand.nextInt(guessable.size());
+		char candidate = guessable.get(characterIndex);
+		return candidate;
+		
 	}
 }
