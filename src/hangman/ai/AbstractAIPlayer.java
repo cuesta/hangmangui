@@ -3,11 +3,9 @@ package hangman.ai;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.Timer;
-
 
 import hangman.LetterSelector;
 import hangman.event.LetterGuessedEvent;
@@ -155,8 +153,8 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	{
 		if(guessableOrig!=null)
 		{
-			guessable = new ArrayList<Character>(guessableOrig.size());
-			Collections.copy(guessableOrig, guessable);
+			guessable = new ArrayList<Character>();
+			guessable.addAll(guessableOrig);
 		}
 	}
 

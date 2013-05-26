@@ -143,12 +143,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	@Override
 	public void onGameOver(GameOverEvent eve)
 	{
-		// If player lost game, reveal the word
-		for (int i = 0; i < button.length; i++)
-		{
-			button[i].setEnabled(false);
-			
-		}
+		
 		if (eve.getResult() == Result.PLAYER_LOST)
 		{
 			JOptionPane.showMessageDialog(this, "Sorry, the word was '"+logic.getKeyPhrase()+"'. Game Over!");
@@ -156,6 +151,12 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		else
 		{
 			JOptionPane.showMessageDialog(this, "Congratulations, you guessed correctly!");
+		}
+		
+		for (int i = 0; i < button.length; i++)
+		{
+			button[i].setEnabled(false);
+			
 		}
 
 	}
