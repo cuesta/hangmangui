@@ -2,8 +2,8 @@ package hangman.ai;
 
 import java.util.*;
 
-public class RandomPlayer 
-{
+public class RandomPlayer extends AbstractAIPlayer
+
 	private String word;
 	private char[] guessed;
 	private char[] guessable;
