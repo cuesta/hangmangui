@@ -21,11 +21,13 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 
 	protected LetterSelector selector;
 	protected boolean listeningEnabled;
+	protected int wordLength;
 	
 	/** Creates a new instance with the LetterSelector indicated.
 	 * @param select callback to the UI to select a letter
 	 * */
-	public AbstractAIPlayer(LetterSelector select ){
+	public AbstractAIPlayer(LetterSelector select )
+	{
 		this.selector = select;
 	}
 	
@@ -54,10 +56,12 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 	{
 		return listeningEnabled;
 	}
+	
 	/** Causes the AI player to select the first letter.*/
-	public void start() 
+	public void start(int wordLength) 
 	{
 		setListeningEnabled(true);
+		setWordLength(wordLength);
 		selector.selectLetter(nextLetter());
 	}
 
@@ -98,5 +102,21 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 			setListeningEnabled(false);
 		}
 	
+	}
+
+	/**
+	 * @return the wordLength
+	 */
+	public int getWordLength()
+	{
+		return wordLength;
+	}
+
+	/**
+	 * @param wordLength the wordLength to set
+	 */
+	public void setWordLength(int wordLength)
+	{
+		this.wordLength = wordLength;
 	}
 }

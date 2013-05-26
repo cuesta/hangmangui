@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 
 import hangman.HangmanLogic;
 import hangman.LetterSelector;
+import hangman.ai.AbstractAIPlayer;
+import hangman.ai.CleverPlayer;
 import hangman.ai.SimplisticPlayer;
 import hangman.event.GameOverEvent;
 import hangman.event.GameOverListener;
@@ -36,7 +38,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	private JLabel word;
 	private HangmanLogic logic;
 	// just for testing/demo purposes at this point - we'll need to add the AI to the constructor
-	private SimplisticPlayer dumbAi;
+	private AbstractAIPlayer dumbAi;
 	private JButton aiButton;
 
 	String[] text =
@@ -53,7 +55,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
-		dumbAi = new SimplisticPlayer(this);
+		dumbAi = new CleverPlayer(this);
 		logic.addLetterGuessedListener(dumbAi);
 		
 		
@@ -112,7 +114,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				dumbAi.start();
+				dumbAi.start(logic.getKnownKeyPhrase().length());
 				aiButton.setEnabled(false);
 				// re-enable once game is over
 			}

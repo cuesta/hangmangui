@@ -24,6 +24,9 @@ public class HangmanLogic
 	private ArrayList<GameOverListener> gameOverListeners;
 	private ArrayList<LetterGuessedListener> letterGuessListeners;
 	
+	/**  The place holder character for letter that haven't been guessed yet in the known key phrase.*/
+	public static final char WILDCARD = '-';
+	
 	/**
 	 * Constructor creates this HangmanLogic initial state
 	 * @param newPhrase  the phrase to be used for the key phrase of the hangman game
