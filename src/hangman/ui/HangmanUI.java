@@ -115,8 +115,20 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				dumbAi.start();
 				aiButton.setEnabled(false);
 				// re-enable once game is over
-			}});
-
+			}
+		});
+		
+		restartButton = new JButton("Start Over");
+		wordDisplay.add(restartButton);
+		restartButton.addActionListener(new ActionListener(){
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				
+				
+			}
+		});
 	}
 
 	/*
