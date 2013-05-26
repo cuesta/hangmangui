@@ -41,8 +41,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 
 	String[] text =
 	{ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
-			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z",
-			"Restart" };
+			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z"};
 	JButton[] button = new JButton[text.length];
 
 	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer)
