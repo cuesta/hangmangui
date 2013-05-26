@@ -132,8 +132,12 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		// TODO Disable all further letter selection; notify user that game is
 		// over
 		// If player lost game, reveal the word
-		
-		JOptionPane.showMessageDialog(this, "Sorry, the word was " +keyPhrase+ ". Game Over!");
+		for (int i = 0; i < button.length; i++)
+			{
+				button[i].setEnabled(false);
+				
+			}
+		JOptionPane.showMessageDialog(this, "Sorry, the word was keyPhrase. Game Over!");
 		
 
 	}
