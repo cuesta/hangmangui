@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class WiltingFlowerRenderer implements GameStateRenderer
+public class WiltingFlowerRendererRemix implements GameStateRenderer
 {
   private static int MAX_GUESSES = 9;
 	private JPanel panel;
@@ -20,7 +20,7 @@ public class WiltingFlowerRenderer implements GameStateRenderer
 	int imageIndex = 0;
 	
 	/** Creates a new instance.*/
-	public WiltingFlowerRenderer(HangmanLogic logic) 
+	public WiltingFlowerRendererRemix(HangmanLogic logic) 
 	{
 		panel = new JPanel();
 		panel.setLayout(new BorderLayout());

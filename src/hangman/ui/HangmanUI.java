@@ -45,7 +45,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z"};
 	JButton[] button = new JButton[text.length];
 
-	public HangmanUI(HangmanLogic logic, GameStateRenderer stateRenderer, AbstractAIPlayer aiPlayer) throws IOException
+	public HangmanUI(final HangmanLogic logic, GameStateRenderer stateRenderer, final AbstractAIPlayer aiPlayer) throws IOException
 	{
 		super();
 		this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -60,6 +60,17 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			// provide a callback to the AI player to this instance to select the next letter:
 			aiPlayer.setSelector(this);
 			logic.addLetterGuessedListener(aiPlayer);
+			aiButton = new JButton("Run AI");
+			wordDisplay.add(aiButton);
+			aiButton.addActionListener(new ActionListener(){
+	
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					aiButton.setEnabled(false);
+					aiPlayer.start(logic.getKnownKeyPhrase().length());
+				}
+			});
 		}
 	}
 
@@ -107,22 +118,8 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			alphabet.add(button[i]);
 		}
 		
-		
-		aiButton = new JButton("Run AI");
-		wordDisplay.add(aiButton);
-		aiButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0)
-			{
-				aiButton.setEnabled(false);
-				aiPlayer.start(logic.getKnownKeyPhrase().length());
-			}
-		});
-		
-		
 		restartButton = new JButton("Start Over");
-		wordDisplay.add(restartButton);
+		//wordDisplay.add(restartButton);
 		restartButton.addActionListener(new ActionListener(){
 			
 			@Override
