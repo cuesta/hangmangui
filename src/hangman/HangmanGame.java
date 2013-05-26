@@ -34,9 +34,15 @@ public class HangmanGame
 	//uses the command line arguement to get a file name 
 	public static void main(String[] args) throws IOException 
 	{
-		//String nextWord = WordSupplier.secretWord(args[0]);
+		if(args.length!=3)
+		{
+			System.out.println("You must provide 3 arguments: path to word file, path to letter file (not used), and code for AI player.");
+			System.out.println("r = random, s = systematic, c = clever, h = human");
+		}
+		WordSupplier wordSupplier = new WordSupplier(args[0]);
+		
 		int initialGuesses = 10;
-		HangmanLogic hangman = new HangmanLogic("enamel", initialGuesses);
+		HangmanLogic hangman = new HangmanLogic(wordSupplier.secretWord(), initialGuesses);
 		GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
 		HangmanUI ui = new HangmanUI(hangman, gsr);
 		ui.setVisible(true);

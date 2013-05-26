@@ -26,6 +26,7 @@ public class HangmanLogic
 	
 	/**  The place holder character for letter that haven't been guessed yet in the known key phrase.*/
 	public static final char WILDCARD = '-';
+	public static final String REGEX_VALID = "([a-z])*";
 	
 	/**
 	 * Constructor creates this HangmanLogic initial state

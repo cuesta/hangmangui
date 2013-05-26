@@ -13,6 +13,7 @@ import hangman.ai.AbstractAIPlayer;
 import hangman.ai.CleverPlayer;
 import hangman.ai.SimplisticPlayer;
 import hangman.event.GameOverEvent;
+import hangman.event.GameOverEvent.Result;
 import hangman.event.GameOverListener;
 import hangman.event.LetterGuessedEvent;
 import hangman.event.LetterGuessedListener;
@@ -20,6 +21,7 @@ import hangman.event.LetterGuessedListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -120,6 +122,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			}
 		});
 		
+		/*
 		restartButton = new JButton("Start Over");
 		wordDisplay.add(restartButton);
 		restartButton.addActionListener(new ActionListener(){
@@ -130,7 +133,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				
 				
 			}
-		});
+		});*/
 	}
 
 	/*
@@ -142,16 +145,20 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	@Override
 	public void onGameOver(GameOverEvent eve)
 	{
-		// TODO Disable all further letter selection; notify user that game is
-		// over
 		// If player lost game, reveal the word
 		for (int i = 0; i < button.length; i++)
-			{
-				button[i].setEnabled(false);
-				
-			}
-		JOptionPane.showMessageDialog(this, "Sorry, the word was keyPhrase. Game Over!");
-		
+		{
+			button[i].setEnabled(false);
+			
+		}
+		if (eve.getResult() == Result.PLAYER_LOST)
+		{
+			JOptionPane.showMessageDialog(this, "Sorry, the word was '"+logic.getKeyPhrase()+"'. Game Over!");
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "Congratulations, you guessed right!");
+		}
 
 	}
 
