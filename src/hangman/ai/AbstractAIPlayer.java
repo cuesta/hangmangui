@@ -92,7 +92,7 @@ public abstract class AbstractAIPlayer implements LetterGuessedListener
 					selector.selectLetter(nextLetter());
 				}
 			};
-			Timer t = new Timer(2000, taskPerformer);
+			Timer t = new Timer(1000, taskPerformer);
 			t.setRepeats(false);
 			t.start();
 		}

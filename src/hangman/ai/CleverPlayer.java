@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
+
 import hangman.HangmanLogic;
 import hangman.LetterSelector;
 import hangman.event.LetterGuessedEvent;
@@ -153,13 +155,22 @@ public class CleverPlayer extends AbstractAIPlayer
 		throw new IllegalStateException("We appear to have run out of letters to guess");
 	}
 	
+	/** Loading the marked-up, word-length file, and retrieving candidate words. */
 	private void loadWordCandidates(String regexPattern) 
 	{
-		System.out.println("Load word candidates - looking for pattern "+etaoiCount+" and regex "+regexPattern);
+		File dir = null;
+		while (dir == null)
+		{
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fileChooser.setDialogTitle("Please locate the 'resources' directory in the project folder:");
+			fileChooser.showOpenDialog(null);
+			dir = fileChooser.getSelectedFile();
+		}
 		String frequencyPattern = etaoiCount.toString();
 		wordCandidates = new ArrayList<String>();
 		
-		File wordFile = new File("./bin/"+this.getWordLength()+FILE_SUFFIX);
+		File wordFile = new File(dir.getAbsolutePath()+File.separator + this.getWordLength()+FILE_SUFFIX);
 		try 
 		{
 			Scanner scan = new Scanner(wordFile);
@@ -171,23 +182,17 @@ public class CleverPlayer extends AbstractAIPlayer
 				line = scan.nextLine();
 				if(Character.isDigit(line.charAt(0)))  // digit means frequency pattern in encoded file
 				{
-					System.out.println("freq pattern is "+line);
 					if(frequencyPatternFound)
 					{   // we just hit a new pattern - we're done
 						break;
 					}
 					else if (line.equals(frequencyPattern))
 					{
-						System.out.println("frequency found!");
 						frequencyPatternFound = true;// we've got a hit on our pattern - start collecting words
 					}
-					else
-					{
-						System.out.println("Frequency pattern found, but it's not ours!");
-					}
 				}
-				else if (frequencyPatternFound && line.matches(regexPattern))
-				{	System.out.println("adding word "+line);
+				else if (frequencyPatternFound && line.matches(regexPattern)) // only add words that match the known letters thus far
+				{	
 					wordCandidates.add(line);
 				}
 			}
