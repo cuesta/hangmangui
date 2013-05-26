@@ -134,7 +134,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				
+				// placeholder.
 				
 			}
 		});
