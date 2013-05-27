@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 public class HangmanUI extends JFrame implements GameOverListener,
 		LetterGuessedListener, LetterSelector
 {
-
+	private static final String TITLE = "Hangman's Flower";
 	private JPanel wordDisplay;
 	private JLabel word;
 	private HangmanLogic logic;
@@ -79,12 +79,12 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		setSize(800, 500);
 
 		// places a title on the frame
-		setTitle("Hangman");
+		setTitle(TITLE);
 
 		// sets the location of the frame to centered on the screen
 		setLocationRelativeTo(null);
 
-		JPanel mainPanel = new JPanel(new BorderLayout());
+		JPanel mainPanel = new JPanel(new BorderLayout(20, 0));
 		JPanel gamePanel = new JPanel();
 		JPanel alphabet = new JPanel(new GridLayout(7, 4));
 	

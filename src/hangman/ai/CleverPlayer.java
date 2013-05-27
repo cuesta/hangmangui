@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import hangman.HangmanLogic;
 import hangman.event.LetterGuessedEvent;
 
@@ -19,7 +16,8 @@ import hangman.event.LetterGuessedEvent;
  * 1.  For the first five letters, "guess" the most frequently used letters in the English language.
  * 2.  Based on the overall length of the phrase, locate a pre-parsed list of words that has that same word length.
  * 3.  Based on the frequency of the five letters in the guessable phrase, further narrow down the words from the word file, which is
- *     marked up with the same frequency pattern. 
+ *     marked up with the same frequency pattern. (In hindsight, I'm not sure the pre-parsing and encoding was necessary - I should have run 
+ *     some performance tests first going against the full file.  I just assumed it was going to be slow).
  * 4.  From there on, choose as-of-yet not guessed letters from the candidate words to further narrow down the word list.
  * 
  * Note that this strategic player does not read in the letter file - it relies on a regular expression instead.  In an ideal world,
@@ -46,10 +44,10 @@ public class CleverPlayer extends AbstractAIPlayer
 	/**
 	 * @param select
 	 */
-	public CleverPlayer()
+	public CleverPlayer(File resourcesDir)
 	{
 		super("Clever Player");
-		
+		this.resourcesDir = resourcesDir;
 		sortedFrequentLetters = Arrays.copyOf(frequentLetters, frequentLetters.length);
 		Arrays.sort(sortedFrequentLetters);
 		initialize();
@@ -185,19 +183,7 @@ public class CleverPlayer extends AbstractAIPlayer
 	
 	/** Loading the marked-up, word-length file, and retrieving candidate words. */
 	private void loadWordCandidates(String regexPattern) 
-	{// Inclusion of Swing components in this method is not ideal, due to coupling to a graphical implementation.  
-		//If this whole app was packaged as a jar, we could
-		// simply load the resources from there.  For now, it will have to do!
-	
-		while (resourcesDir == null)
-		{ // ideally, this would be an obvious label on the file chooser, but I'm running out of time ...
-			JOptionPane.showMessageDialog(null, "You will be asked to locate the 'resources' directory in this project's root folder.");
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setDialogTitle("Select 'resources' directory");
-			fileChooser.showOpenDialog(null);
-			resourcesDir = fileChooser.getSelectedFile();
-		}
+	{
 		String frequencyPattern = etaoiCount.toString();
 		wordCandidates = new ArrayList<String>();
 		
