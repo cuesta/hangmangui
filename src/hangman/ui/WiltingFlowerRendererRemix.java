@@ -63,7 +63,7 @@ public class WiltingFlowerRenderer implements GameStateRenderer
 	 */
 	private void setImage(ImageIcon image)
 	{
-		// TODO Auto-generated method stub
+		imageLabel.setIcon(image);
 		
 	}
 
