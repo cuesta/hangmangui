@@ -6,8 +6,7 @@ import hangman.ai.RandomPlayer;
 import hangman.ai.SystematicPlayer;
 import hangman.ui.GameStateRenderer;
 import hangman.ui.HangmanUI;
-import hangman.ui.WiltingFlowerRendererRemix;
-
+import hangman.ui.WiltingFlowerRenderer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -68,7 +67,7 @@ public class HangmanGame
 			int initialGuesses = 10;
 			HangmanLogic hangman = new HangmanLogic(wordSupplier.secretWord(), initialGuesses);
 			//GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
-			GameStateRenderer gsr = new WiltingFlowerRendererRemix(resourcesDir);
+			GameStateRenderer gsr = new WiltingFlowerRenderer(resourcesDir);
 			AbstractAIPlayer player = null;
 			List<Character> guessables = LetterParser.parseCharacterFile(letters);
 			
