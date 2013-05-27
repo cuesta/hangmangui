@@ -32,7 +32,7 @@ public class WiltingFlowerRenderer implements GameStateRenderer
 		images = new ImageIcon[numberOfImages];
 		for (int i = 0; i < numberOfImages; i++)
 		{
-			images[i] = new ImageIcon(getClass().getResource("Flower"+Integer.toString(i) + ".png"));
+			images[i] = new ImageIcon(getClass().getResource("\Flower"+Integer.toString(i) + ".png"));
 		
 		}
 	}
