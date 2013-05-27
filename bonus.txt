@@ -1,0 +1,5 @@
+Attempted Bonus Points:
+1.  Clever Player
+2.  Graphical Presentation of Count Down
+3.  Reset Mode for repeat games
+4.  AI Picker
