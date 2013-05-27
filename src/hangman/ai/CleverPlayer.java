@@ -46,7 +46,7 @@ public class CleverPlayer extends AbstractAIPlayer
 	 */
 	public CleverPlayer(File resourcesDir)
 	{
-		super("Clever Player");
+		super("Clever");
 		this.resourcesDir = resourcesDir;
 		sortedFrequentLetters = Arrays.copyOf(frequentLetters, frequentLetters.length);
 		Arrays.sort(sortedFrequentLetters);
@@ -57,6 +57,7 @@ public class CleverPlayer extends AbstractAIPlayer
 	protected void initialize()
 	{
 		super.initialize();
+		frequentLetterIndex = 0;
 		guessedCharacters = new ArrayList<Character>();
 		etaoiCount = new StringBuilder(5);
 		wordCandidates = null;

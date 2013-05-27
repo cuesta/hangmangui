@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.io.File;
 
+import hangman.HangmanLogic;
 import hangman.event.LetterGuessedEvent;
 
 import javax.swing.ImageIcon;
@@ -84,6 +85,17 @@ public class WiltingFlowerRenderer implements GameStateRenderer
 	public JComponent getDisplay()
 	{
 		return panel;
+	}
+
+	/* (non-Javadoc)
+	 * @see hangman.ui.GameStateRenderer#reset(hangman.HangmanLogic)
+	 */
+	@Override
+	public void reset(HangmanLogic logic)
+	{
+		imageIndex = 0;
+		imageLabel.setIcon(images[imageIndex]);
+		messageLabel.setText(MESSAGE+MAX_GUESSES);
 	}
 
 }

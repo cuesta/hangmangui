@@ -2,6 +2,7 @@ package hangman.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.io.IOException;
 
 import hangman.HangmanLogic;
 import hangman.LetterSelector;
+import hangman.WordSupplier;
 import hangman.ai.AbstractAIPlayer;
 import hangman.event.GameOverEvent;
 import hangman.event.GameOverEvent.Result;
@@ -18,6 +20,7 @@ import hangman.event.LetterGuessedEvent;
 import hangman.event.LetterGuessedListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,42 +39,60 @@ public class HangmanUI extends JFrame implements GameOverListener,
 	private JPanel wordDisplay;
 	private JLabel word;
 	private HangmanLogic logic;
-	private AbstractAIPlayer aiPlayer;
 	private JButton aiButton;
 	private JButton restartButton;
+	private JComboBox playerComboBox;
+	private JPanel aiPanel;
+	private AbstractAIPlayer[] aiPlayers;
+	private GameStateRenderer stateRenderer;
+	private WordSupplier wordSupplier;
 
 	String[] text =
 	{ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
 			"o", "p", "q", "r", "s", "t", "w", "u", "v", "x", "y", "z"};
 	JButton[] button = new JButton[text.length];
 
-	public HangmanUI(final HangmanLogic logic, GameStateRenderer stateRenderer, final AbstractAIPlayer aiPlayer) throws IOException
+	public HangmanUI(final HangmanLogic logic, GameStateRenderer stateRenderer, AbstractAIPlayer[] _aiPlayers, int selectedAi, WordSupplier wordSupplier) throws IOException
 	{
 		super();
+		aiPlayers = _aiPlayers;
+		this.stateRenderer = stateRenderer;
+		this.wordSupplier = wordSupplier;
 		this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		this.logic = logic;
 		constructUI(stateRenderer);
 		logic.addGameOverListener(this);
 		logic.addLetterGuessedListener(this);
 		logic.addLetterGuessedListener(stateRenderer);
-		if(aiPlayer!=null)
+		this.playerComboBox = new JComboBox(_aiPlayers);
+		
+		this.playerComboBox.setSelectedIndex(selectedAi);
+		
+		for (AbstractAIPlayer aiPlayer : _aiPlayers)
 		{
-			this.aiPlayer = aiPlayer;
 			// provide a callback to the AI player to this instance to select the next letter:
 			aiPlayer.setSelector(this);
 			logic.addLetterGuessedListener(aiPlayer);
-			aiButton = new JButton("Run AI");
-			wordDisplay.add(aiButton);
-			aiButton.addActionListener(new ActionListener(){
-	
-				@Override
-				public void actionPerformed(ActionEvent arg0)
-				{
-					aiButton.setEnabled(false);
-					aiPlayer.start(logic.getKnownKeyPhrase().length());
-				}
-			});
 		}
+		
+		aiPanel.add(new JLabel("AI mode: "));
+		aiPanel.add(playerComboBox);
+		aiButton = new JButton("Run AI");
+		aiPanel.add(aiButton);
+		
+		aiButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				aiButton.setEnabled(false);
+				final AbstractAIPlayer ai = (AbstractAIPlayer) playerComboBox.getSelectedItem();
+				ai.start(logic.getKnownKeyPhrase().length());
+			}
+		});
+		
+		
+		
 	}
 
 	private void constructUI(GameStateRenderer gsr)
@@ -87,20 +108,25 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		JPanel mainPanel = new JPanel(new BorderLayout(20, 0));
 		JPanel gamePanel = new JPanel();
 		JPanel alphabet = new JPanel(new GridLayout(7, 4));
-	
+		JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
+		aiPanel = new JPanel();
+		aiPanel.setComponentOrientation(
+                ComponentOrientation.LEFT_TO_RIGHT);
 
 		word = new JLabel();
 		word.setText(logic.getKnownKeyPhrase());
-		Font font = new Font("Verdana", Font.BOLD, 72);
+		Font font = new Font("Verdana", Font.BOLD, 48);
 		
 		word.setFont(font);
 		wordDisplay = new JPanel();
 		wordDisplay.add(word);
+		bottomPanel.add(wordDisplay);
+		bottomPanel.add(aiPanel);
 
 		// add sub-panels to main panel
 		mainPanel.add(gamePanel, BorderLayout.CENTER);
 		mainPanel.add(alphabet, BorderLayout.EAST);
-		mainPanel.add(wordDisplay, BorderLayout.SOUTH);
+		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
 		// add main panel to frame
 		add(mainPanel);
@@ -119,14 +145,32 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		}
 		
 		restartButton = new JButton("Start Over");
-		//wordDisplay.add(restartButton);
+		wordDisplay.add(restartButton);
 		restartButton.addActionListener(new ActionListener(){
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// placeholder.
-				
+				try 
+				{
+					logic.reset(wordSupplier.secretWord(), logic.getNumberOfGuesses());
+					word.setText(logic.getKnownKeyPhrase());
+					aiButton.setEnabled(true);
+					for (AbstractAIPlayer player : aiPlayers)
+					{
+						player.reset();
+					}
+					stateRenderer.reset(logic);
+					for (int i = 0; i < button.length; i++)
+					{
+						button[i].setEnabled(true);
+					}
+					restartButton.setEnabled(false);
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "An exception occurred: "+e.getMessage());
+				}
 			}
 		});
 	}
@@ -153,7 +197,6 @@ public class HangmanUI extends JFrame implements GameOverListener,
 		for (int i = 0; i < button.length; i++)
 		{
 			button[i].setEnabled(false);
-			
 		}
 
 	}
@@ -185,6 +228,7 @@ public class HangmanUI extends JFrame implements GameOverListener,
 				{
 					String letter = text[i];
 					button[i].setEnabled(false);
+					restartButton.setEnabled(true);
 					try {
 						logic.guessCharacter(letter.charAt(0));
 					} catch (Exception e) {

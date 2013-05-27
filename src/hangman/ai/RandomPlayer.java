@@ -13,7 +13,7 @@ public class RandomPlayer extends AbstractAIPlayer
 	 */
 	public RandomPlayer(List<Character> guessables) 
 	{
-		super("Random Player");
+		super("Random");
 		guessableOrig = guessables;
 		initialize();
 	}

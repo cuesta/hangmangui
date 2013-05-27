@@ -1,5 +1,6 @@
 package hangman.ui;
 
+import hangman.HangmanLogic;
 import hangman.event.LetterGuessedListener;
 
 import javax.swing.JComponent;
@@ -19,4 +20,7 @@ public interface GameStateRenderer extends LetterGuessedListener{
 	
 	/** Returns the component that provides the actual display.*/
 	public JComponent getDisplay();
+	
+	/** Resets the state.*/
+	public void reset(HangmanLogic logic);
 }

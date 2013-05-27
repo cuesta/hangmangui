@@ -22,6 +22,7 @@ public class BasicGameStateRenderer implements GameStateRenderer
 	private JPanel panel;
 	private JLabel instructions;
 	private JLabel nbrPanel;
+
 	
 	/** Creates a new instance.*/
 	public BasicGameStateRenderer(HangmanLogic logic) 
@@ -67,6 +68,16 @@ public class BasicGameStateRenderer implements GameStateRenderer
 	public JComponent getDisplay()
 	{
 		return panel;
+	}
+
+	/* (non-Javadoc)
+	 * @see hangman.ui.GameStateRenderer#reset()
+	 */
+	@Override
+	public void reset(HangmanLogic logic)
+	{
+		nbrPanel.setText(Integer.toString(logic.getNumGuessesLeft()));
+		
 	}
 
 }

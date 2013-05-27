@@ -19,7 +19,7 @@ public class SystematicPlayer extends AbstractAIPlayer
 	 */
 	public SystematicPlayer(List<Character> guessables)
 	{
-		super("Systematic Player");
+		super("Systematic");
 		this.guessables = guessables;
 	}
 

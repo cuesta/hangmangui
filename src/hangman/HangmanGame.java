@@ -68,28 +68,27 @@ public class HangmanGame
 			HangmanLogic hangman = new HangmanLogic(wordSupplier.secretWord(), initialGuesses);
 			//GameStateRenderer gsr = new BasicGameStateRenderer(hangman);
 			GameStateRenderer gsr = new WiltingFlowerRenderer(resourcesDir);
-			AbstractAIPlayer player = null;
+		
 			List<Character> guessables = LetterParser.parseCharacterFile(letters);
 			
 			char modeCode = args[2].charAt(0);
-			// determine which AI player to load:
+			
+			AbstractAIPlayer[] aiPlayers = {new RandomPlayer(guessables), new SystematicPlayer(guessables), new CleverPlayer(resourcesDir)};
+			// determine which AI player to select as default
+			int aiIndex = 0;
 			switch(modeCode)
 			{
 			case 'r':
-				player = new RandomPlayer(guessables);
+				aiIndex = 0;
 				break;
 			case 's':
-				player = new SystematicPlayer(guessables);
+				aiIndex = 1;
 				break;
 			case 'c':
-				player = new CleverPlayer(resourcesDir);
+				aiIndex = 2;
 				break;
-			case 'h':
-				break;
-				default :
-					System.out.println("You've provided an invalid mode: "+args[2]);
 			}
-			HangmanUI ui = new HangmanUI(hangman, gsr, player);
+			HangmanUI ui = new HangmanUI(hangman, gsr, aiPlayers, aiIndex, wordSupplier);
 			ui.setVisible(true);
 		} catch (Exception e) 
 		{
